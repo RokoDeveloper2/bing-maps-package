@@ -1,0 +1,788 @@
+{
+    "package": "BingMaps",
+    "tagline": "BingMaps API",
+    "description": "The Bing Maps APIs include map controls and services that you can use to incorporate Bing Maps in applications and websites. In addition to interactive and static maps, the APIs provide access to other geospatial features such as geocoding, route and traffic data and spatial data sources that you can use to store and query data that has a spatial component, such as store locations.",
+    "image": "https:\/\/logo.clearbit.com\/bing.com",
+    "repo": "https:\/\/github.com\/RapidSoftwareSolutions\/Marketplace-BingMaps-Package",
+    "keywords": [
+        "API",
+        "maps",
+        "microsoft",
+        "coordinates",
+        "navigation"
+    ],
+    "accounts": {
+        "domain": "https:\/\/www.bing.com\/maps",
+        "credentials": [
+            "key"
+        ]
+    },
+    "steps": [
+        "Go to https://portal.azure.com",
+        "Search Bing Maps API for Enterprise",
+        "Click 'Create' ",
+        "Sign up or log in when prompted",
+        "In Key section choose Key1 or Key2. Copy one of these keys"
+    ],
+    "blocks": [
+        {
+            "name": "findLocationByAddress",
+            "description": "Get latitude and longitude coordinates for a location by specifying values such as a locality, postal code, and street address.",
+            "args": [
+                {
+                    "name": "key",
+                    "type": "credentials",
+                    "info": "Your API key",
+                    "required": true
+                },
+                {
+                    "name": "adminDistrict",
+                    "type": "String",
+                    "info": "The subdivision name in the country or region for an address. This element is typically treated as the first order administrative subdivision, but in some cases it is the second, third, or fourth order subdivision in a country, dependency, or region. Example: WA",
+                    "required": true
+                },
+                {
+                    "name": "locality",
+                    "type": "String",
+                    "info": "The locality, such as the city or neighborhood, that corresponds to an address. Example: Seattle",
+                    "required": true
+                },
+                {
+                    "name": "postalCode",
+                    "type": "String",
+                    "info": "The post code, postal code, or ZIP Code of an address. Example: 98178",
+                    "required": true
+                },
+                {
+                    "name": "addressLine",
+                    "type": "String",
+                    "info": "The official street line of an address relative to the area, as specified by the Locality, or PostalCode, properties. Typical use of this element would be to provide a street address or any official address. Example: 1 Microsoft Way",
+                    "required": true
+                },
+                {
+                    "name": "countryRegion",
+                    "type": "String",
+                    "info": "The ISO country code for the country. Example: AU",
+                    "required": true
+                },
+                {
+                    "name": "includeNeighborhood",
+                    "type": "Select",
+                    "options": [
+                        "0",
+                        "1"
+                    ],
+                    "info": "One of the following values: 1: Include neighborhood information when available.0 [default]: Do not include neighborhood information.",
+                    "required": false
+                },
+                {
+                    "name": "include",
+                    "type": "Select",
+                    "options": [
+                        "ciso2"
+                    ],
+                    "info": "The only value for this parameter is ciso2. When you specify include=ciso2, the two-letter ISO country code is included for addresses in the response.",
+                    "required": false
+                },
+                {
+                    "name": "maxResults",
+                    "type": "Number",
+                    "info": "Specifies the maximum number of locations to return in the response. A string that contains an integer between 1 and 20. The default value is 5.",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "http:\/\/dev.virtualearth.net\/REST\/v1\/Locations",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "adminDistrict",
+                            "locality",
+                            "postalCode",
+                            "addressLine",
+                            "countryRegion",
+                            "includeNeighborhood",
+                            "include",
+                            "maxResults",
+                            "key"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "findLocationByPoint",
+            "description": "Use the following URL template to get the location information associated with latitude and longitude coordinates.",
+            "args": [
+                {
+                    "name": "key",
+                    "type": "credentials",
+                    "info": "Your API key",
+                    "required": true
+                },
+                {
+                    "name": "includeEntityTypes",
+                    "type": "List",
+                    "info": "Specifies the entity types that you want to return in the response. Only the types you specify will be returned. If the point cannot be mapped to the entity types you specify, no location information is returned in the response.",
+                    "required": false,
+                    "structure": {
+                        "name": "option",
+                        "type": "Select",
+                        "options": [
+                            "Address",
+                            "Neighborhood",
+                            "PopulatedPlace",
+                            "Postcode1",
+                            "AdminDivision1",
+                            "AdminDivision2",
+                            "CountryRegion"
+                        ],
+                        "info": "Types selected from the following options",
+                        "required": true
+                    },
+                    "vendorSchema": {
+                        "format": "toString:{,}"
+                    }
+                },
+                {
+                    "name": "point",
+                    "type": "Map",
+                    "info": "A point on the Earth specified by a latitude and longitude. Example: 47.64054,-122.12934",
+                    "required": true
+                },
+                {
+                    "name": "includeNeighborhood",
+                    "type": "Select",
+                    "options": [
+                        "0",
+                        "1"
+                    ],
+                    "info": "Specifies to include the neighborhood in the response when it is available.",
+                    "required": false
+                },
+                {
+                    "name": "include",
+                    "type": "Select",
+                    "options": [
+                        "ciso2"
+                    ],
+                    "info": "The only value for this parameter is ciso2. When you specify include=ciso2, the two-letter ISO country code is included for addresses in the response.",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "http:\/\/dev.virtualearth.net\/REST\/v1\/Locations\/point",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "includeEntityTypes",
+                            "point",
+                            "includeNeighborhood",
+                            "include",
+                            "key"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "findLocationByQuery",
+            "description": "Use the following URL templates to get latitude and longitude coordinates that correspond to location information provided as a query string.",
+            "args": [
+                {
+                    "name": "key",
+                    "type": "credentials",
+                    "info": "Your API key",
+                    "required": true
+                },
+                {
+                    "name": "query",
+                    "type": "String",
+                    "info": "A point on the Earth specified by a latitude and longitude. Example: 47.64054,-122.12934",
+                    "required": true
+                },
+                {
+                    "name": "includeNeighborhood",
+                    "type": "Select",
+                    "options": [
+                        "0",
+                        "1"
+                    ],
+                    "info": "Specifies to include the neighborhood in the response when it is available.",
+                    "required": false
+                },
+                {
+                    "name": "include",
+                    "type": "Select",
+                    "options": [
+                        "ciso2"
+                    ],
+                    "info": "The only value for this parameter is ciso2. When you specify include=ciso2, the two-letter ISO country code is included for addresses in the response.",
+                    "required": false
+                },
+                {
+                    "name": "maxResults",
+                    "type": "Number",
+                    "info": "Specifies the maximum number of locations to return in the response.",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "http:\/\/dev.virtualearth.net\/REST\/v1\/Locations\/locationQuery",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "query",
+                            "maxResults",
+                            "includeNeighborhood",
+                            "include",
+                            "key"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "getElevationValues",
+            "description": "Get elevation values (in meters) for a set of locations, a polyline path or area on the Earth.",
+            "args": [
+                {
+                    "name": "key",
+                    "type": "credentials",
+                    "info": "Your API key",
+                    "required": true
+                },
+                {
+                    "name": "points",
+                    "type": "List",
+                    "info": "A set of coordinates on the Earth to use in elevation calculations. The exact use of these points depends on the type of elevation request. Example: [35.89431,-110.72522,35.89393,-110.72578,35.89374]",
+                    "required": true,
+                    "structure": {
+                        "name": "point",
+                        "type": "Map",
+                        "info": "Single point",
+                        "required": false
+                    },
+                    "vendorSchema": {
+                        "format": "toString:{,}"
+                    }
+                },
+                {
+                    "name": "bounds",
+                    "type": "Map",
+                    "info": "Specifies the rectangular area over which to provide elevation values. A bounding box defined as a set of WGS84 latitudes and longitudes in the following order: south latitude, west longitude, north latitude, east longitude. Example: bounds=45.219,-122.234,47.61,-122.07",
+                    "required": true
+                },
+                {
+                    "name": "rows",
+                    "type": "Number",
+                    "info": " Specifies the number of rows and columns to use to divide the bounding box area into a grid. The rows and columns that define the bounding box each count as two (2) of the rows and columns. Elevation values are returned for all vertices of the grid.",
+                    "required": true
+                },
+                {
+                    "name": "cols",
+                    "type": "Number",
+                    "info": " Specifies the number of rows and columns to use to divide the bounding box area into a grid. The rows and columns that define the bounding box each count as two (2) of the rows and columns. Elevation values are returned for all vertices of the grid.",
+                    "required": true
+                },
+                {
+                    "name": "samples",
+                    "type": "Number",
+                    "info": "Specifies the number of equally-spaced elevation values to provide along a polyline path.",
+                    "required": true
+                },
+                {
+                    "name": "heights",
+                    "type": "String",
+                    "info": "Specifies which sea level model to use to calculate elevation.",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "http:\/\/dev.virtualearth.net\/REST\/v1\/Elevation\/List",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "points",
+                            "bounds",
+                            "rows",
+                            "cols",
+                            "samples",
+                            "heights",
+                            "key"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "getStaticMap",
+            "description": "Get a static map. You can also display a route on a static map, and you can request static map metadata. Static map metadata includes the absolute (latitude and longitude) and relative (with respect to the map) coordinates and size of pushpins as well as the map area and center point.",
+            "args": [
+                {
+                    "name": "key",
+                    "type": "credentials",
+                    "info": "Your API key",
+                    "required": true
+                },
+                {
+                    "name": "query",
+                    "type": "String",
+                    "info": "A query string that is used to determine the map location to display.",
+                    "required": true
+                },
+                {
+                    "name": "mapLayer",
+                    "type": "Select",
+                    "options":["TrafficFlow"],
+                    "info": " A display layer that renders on top of the imagery set. Must be: TrafficFlow",
+                    "required": true
+                },
+                {
+                    "name": "zoomLevel",
+                    "type": "Number",
+                    "info": "The level of zoom to display. An integer between 0 and 21.",
+                    "required": true
+                }
+
+            ],
+            "vendorRequest": {
+                "url": "http:\/\/dev.virtualearth.net\/REST\/v1\/Imagery\/Map\/imagerySet\/centerPoint\/zoomLevel",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "key",
+                            "centerPoint",
+                            "declutterPins",
+                            "dpi",
+                            "format",
+                            "imagerySet",
+                            "mapArea",
+                            "mapLayer",
+                            "mapSize",
+                            "pushpin",
+                            "mapMetadata",
+                            "query",
+                            "zoomLevel",
+                            "highlightEntity",
+                            "entityType",
+                            "style"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "getImageryMetadata",
+            "description": "Get metadata for imagery that is hosted by Bing Maps. The imagery metadata returned includes URLs and dimensions for imagery tiles, ranges of zoom levels, and imagery vintage information.",
+            "args": [
+                {
+                    "name": "key",
+                    "type": "credentials",
+                    "info": "Your API key",
+                    "required": true
+                },
+                {
+                    "name": "imagerySet",
+                    "type": "Select",
+                    "options": [
+                        "Aerial",
+                        "AerialWithLabels",
+                        "AerialWithLabelsOnDemand",
+                        "Birdseye",
+                        "BirdseyeWithLabels",
+                        "BirdseyeV2",
+                        "BirdseyeV2WithLabels",
+                        "CanvasDark",
+                        "CanvasLight",
+                        "CanvasGray",
+                        "Road",
+                        "RoadOnDemand",
+                        "OrdnanceSurvey"
+                    ],
+                    "info": "The type of imagery for which you are requesting metadata. Must be: Aerial - Aerial imagery.          AerialWithLabels - Aerial imagery with a road overlay. AerialWithLabelsOnDemand, Birdseye - Bird\u2019s eye (oblique-angle) imagery. BirdseyeWithLabels - Bird\u2019s eye imagery with a road overlay. BirdseyeV2 - The second generation Bird\u2019s eye (oblique-angle) imagery. BirdseyeV2WithLabels - The second generation Bird\u2019s eye (oblique-angle) imagerywith a road overlay. CanvasDark - A dark version of the road maps. CanvasLight - A lighter version of the road maps which also has some of the details such as hill shading disabled. CanvasGray - A grayscale version of the road maps. Road - Roads without additional imagery. Uses the legacy static tile service. RoadOnDemand - Roads without additional imagery. Uses the dynamic tile service. OrdnanceSurvey - Ordnance Survey imagery. This imagery is visible only for the London area.",
+                    "required": true
+                },
+                {
+                    "name": "centerPoint",
+                    "type": "Map",
+                    "info": "A point on the Earth where the map is centered. Example: centerPoint=47.610,-122.107",
+                    "required": false
+                },
+                {
+                    "name": "include",
+                    "type": "Select",
+                    "options": [
+                        "ImageryProvider"
+                    ],
+                    "info": "Specifies to provide additional information about the imagery as part of the response. The only option for this parameter is ImageryProviders. When this parameter value is specified, information about the imagery providers is returned in the response.",
+                    "required": false
+                },
+                {
+                    "name": "orientation",
+                    "type": "Number",
+                    "info": "The orientation of the viewport to use for the imagery metadata. This option only applies to Birdseye imagery.",
+                    "required": false
+                },
+                {
+                    "name": "uriScheme",
+                    "type": "Select",
+                    "options": [
+                        "http",
+                        "https"
+                    ],
+                    "info": "Specifies the scheme that image URL in the response should use. Musy be http or https",
+                    "required": false
+                },
+                {
+                    "name": "zoomLevel",
+                    "type": "Number",
+                    "info": "The level of zoom to use for the imagery metadata.",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "http://dev.virtualearth.net/REST/v1/Imagery/Metadata/{$data['imagerySet']}/{$data['centerPoint']}",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "key",
+                            "include",
+                            "orientation",
+                            "uriScheme",
+                            "zoomLevel"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "calculateRoute",
+            "description": "Get a walking, driving or transit route by specifying a series of waypoints. A waypoint is a specified geographical location defined by longitude and latitude that is used for navigational purposes. The route includes information such as route instructions, travel duration, travel distance or transit information.",
+            "args": [
+                {
+                    "name": "key",
+                    "type": "credentials",
+                    "info": "Your API key",
+                    "required": true
+                },
+                {
+                    "name": "waypoints",
+                    "type": "List",
+                    "info": "Specifies two or more locations that define the route and that are in sequential order.",
+                    "required": true,
+                    "structure": {
+                        "name": "waypoint",
+                        "type": "String",
+                        "info": "Single waypoint",
+                        "required": false
+                    }
+                },
+                {
+                    "name": "avoid",
+                    "type": "Select",
+                    "options": [
+                        "highways",
+                        "tolls",
+                        "minimizeHighways",
+                        "minimizeTolls"
+                    ],
+                    "info": "Specifies the road types to minimize or avoid when a route is created for the driving travel mode.",
+                    "required": false
+                },
+                {
+                    "name": "distanceBeforeFirstTurn",
+                    "type": "Number",
+                    "info": "Specifies the distance before the first turn is allowed in the route. This option only applies to the driving travel mode.",
+                    "required": false
+                },
+                {
+                    "name": "heading",
+                    "type": "Number",
+                    "info": "Specifies the initial heading for the route.",
+                    "required": false
+                },
+                {
+                    "name": "optimize",
+                    "type": "Select",
+                    "options": [
+                        "distance",
+                        "time",
+                        "timeWithTraffic",
+                        "timeAvoidClosure"
+                    ],
+                    "info": "Specifies what parameters to use to optimize the route. Must be: distance,time,timeWithTraffic,timeAvoidClosure",
+                    "required": false
+                },
+                {
+                    "name": "routeAttributes",
+                    "type": "Select",
+                    "options": [
+                        "excludeItinerary",
+                        "routePath",
+                        "transitStops",
+                        "routeSummariesOnly",
+                        "all"
+                    ],
+                    "info": "Specify to include or exclude parts of the routes response.",
+                    "required": false
+                },
+                {
+                    "name": "routePathOutput",
+                    "type": "Select",
+                    "options": [
+                        "Points",
+                        "None"
+                    ],
+                    "info": "Specifies whether the response should include information about Point (latitude and longitude) values for the route\u2019s path. Must be: Points, None",
+                    "required": false
+                },
+                {
+                    "name": "tolerances",
+                    "type": "List",
+                    "info": "Specifies a series of tolerance values. Each value produces a subset of points that approximates the route that is described by the full set of points. A set of comma-separated double values. ",
+                    "required": false,
+                    "structure": {
+                        "name": "value",
+                        "type": "String",
+                        "info": "Single value",
+                        "required": false
+                    },
+                    "vendorSchema": {
+                        "format": "toString:{,}"
+                    }
+                },
+                {
+                    "name": "distanceUnit",
+                    "type": "Select",
+                    "options": [
+                        "mi",
+                        "km"
+                    ],
+                    "info": "The units to use for distance in the response. Must be: mi, km",
+                    "required": false
+                },
+                {
+                    "name": "dateTime",
+                    "type": "DatePicker",
+                    "info": "A string that contains the date and time formatted as a DateTime value. ",
+                    "required": false
+                },
+                {
+                    "name": "timeType",
+                    "type": "Select",
+                    "options": [
+                        "Arrival",
+                        "Departure",
+                        "LastAvailable"
+                    ],
+                    "info": "Specifies how to interpret the date and transit time value that is specified by the dateTime parameter. Must be: Arrival, Departure, LastAvailable",
+                    "required": false
+                },
+                {
+                    "name": "maxSolutions",
+                    "type": "Number",
+                    "info": "Specifies the maximum number of transit or driving routes to return.",
+                    "required": false
+                },
+                {
+                    "name": "travelMode",
+                    "type": "Select",
+                    "options": ["Driving","Walking","Transit"],
+                    "info": "One of the following values: Driving, Walking, Transit",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "http:\/\/dev.virtualearth.net\/REST\/v1\/Routes",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "key",
+                            "avoid",
+                            "distanceBeforeFirstTurn",
+                            "heading",
+                            "optimize",
+                            "routeAttributes",
+                            "routePathOutput",
+                            "tolerances",
+                            "distanceUnit",
+                            "dateTime",
+                            "timeType",
+                            "maxSolutions",
+                            "travelMode"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        },
+        {
+            "name": "calculateRouteFromMajorRoads",
+            "description": "Return a driving route to a location from major roads in four directions (West, North, East and South). You can use this block for routes in the United States, Canada and Mexico.",
+            "args": [
+                {
+                    "name": "key",
+                    "type": "credentials",
+                    "info": "Your API key",
+                    "required": true
+                },
+                {
+                    "name": "destination",
+                    "type": "Map",
+                    "info": "Specifies the final location for all the routes.",
+                    "required": true
+                },
+                {
+                    "name": "exclude",
+                    "type": "Select",
+                    "options": [
+                        "routes"
+                    ],
+                    "info": "Specifies to return only starting points for each major route in the response. When this option is not specified, detailed directions for each route are returned. The only value for this parameter is routes.",
+                    "required": false
+                },
+                {
+                    "name": "routeAttributes",
+                    "type": "Select",
+                    "options": [
+                        "excludeItinerary",
+                        "routePath"
+                    ],
+                    "info": "Specify to include or exclude parts of the routes response. Must be: excludeItinerary, routePath",
+                    "required": false
+                },
+                {
+                    "name": "routePathOutput",
+                    "type": "Select",
+                    "options": [
+                        "Points",
+                        "None"
+                    ],
+                    "info": " Specifies whether the response should include information about Point (latitude and longitude) values for each route\u2019s path. Must be: Points, None",
+                    "required": false
+                },
+                {
+                    "name": "distanceUnit",
+                    "type": "Select",
+                    "options": [
+                        "mi",
+                        "km"
+                    ],
+                    "info": "The units to use for distance. Must be: mi, km",
+                    "required": false
+                }
+            ],
+            "vendorRequest": {
+                "url": "http:\/\/dev.virtualearth.net\/REST\/v1\/Routes\/FromMajorRoads",
+                "method": "get",
+                "requestParameters": [
+                    {
+                        "type": "query",
+                        "parameters": [
+                            "key",
+                            "destination",
+                            "exclude",
+                            "routeAttributes",
+                            "routePathOutput",
+                            "distanceUnit"
+                        ]
+                    }
+                ]
+            },
+            "callbacks": [
+                {
+                    "name": "error",
+                    "info": "Error"
+                },
+                {
+                    "name": "success",
+                    "info": "Success"
+                }
+            ]
+        }
+    ]
+}
